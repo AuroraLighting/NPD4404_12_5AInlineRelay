@@ -93,7 +93,7 @@ PGM EmberAfGenericClusterFunction emberAfFuncArrayOnOffClusterServer[] = { (Embe
 PGM EmberAfGenericClusterFunction emberAfFuncArrayOtaBootloadClusterClient[] = { (EmberAfGenericClusterFunction)emberAfOtaBootloadClusterClientInitCallback,(EmberAfGenericClusterFunction)emberAfOtaBootloadClusterClientDefaultResponseCallback}; \
 
 
-// Clusters defitions
+// Clusters definitions
 #define GENERATED_CLUSTERS { \
     { 0x0000, (EmberAfAttributeMetadata*)&(generatedAttributes[0]), 13, 0, (CLUSTER_MASK_SERVER), NULL,  },    \
     { 0x0003, (EmberAfAttributeMetadata*)&(generatedAttributes[13]), 2, 4, (CLUSTER_MASK_SERVER| CLUSTER_MASK_INIT_FUNCTION| CLUSTER_MASK_ATTRIBUTE_CHANGED_FUNCTION), emberAfFuncArrayIdentifyClusterServer, },    \
@@ -254,19 +254,19 @@ PGM EmberAfGenericClusterFunction emberAfFuncArrayOtaBootloadClusterClient[] = {
 
 
 #define EMBER_AF_GENERATED_PLUGIN_INIT_FUNCTION_DECLARATIONS \
-  void emberAfPluginConnectionManagerInitCallback(void); \
-  void emberAfPluginCountersInitCallback(void); \
   void emberAfPluginEepromInitCallback(void); \
   void emberAfPluginGreenPowerClientInitCallback(void); \
   void emberAfPluginReportingInitCallback(void); \
+  void emberAfPluginConnectionManagerInitCallback(void); \
+  void emberAfPluginCountersInitCallback(void); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_INIT_FUNCTION_CALLS \
-  emberAfPluginConnectionManagerInitCallback(); \
-  emberAfPluginCountersInitCallback(); \
   emberAfPluginEepromInitCallback(); \
   emberAfPluginGreenPowerClientInitCallback(); \
   emberAfPluginReportingInitCallback(); \
+  emberAfPluginConnectionManagerInitCallback(); \
+  emberAfPluginCountersInitCallback(); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_NCP_INIT_FUNCTION_DECLARATIONS \
@@ -278,17 +278,17 @@ PGM EmberAfGenericClusterFunction emberAfFuncArrayOtaBootloadClusterClient[] = {
 
 
 #define EMBER_AF_GENERATED_PLUGIN_STACK_STATUS_FUNCTION_DECLARATIONS \
-  void emberAfPluginConnectionManagerStackStatusCallback(EmberStatus status); \
-  void emberAfPluginNetworkSteeringStackStatusCallback(EmberStatus status); \
-  void emberAfPluginOtaClientStackStatusCallback(EmberStatus status); \
   void emberAfPluginReportingStackStatusCallback(EmberStatus status); \
+  void emberAfPluginOtaClientStackStatusCallback(EmberStatus status); \
+  void emberAfPluginNetworkSteeringStackStatusCallback(EmberStatus status); \
+  void emberAfPluginConnectionManagerStackStatusCallback(EmberStatus status); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_STACK_STATUS_FUNCTION_CALLS \
-  emberAfPluginConnectionManagerStackStatusCallback(status); \
-  emberAfPluginNetworkSteeringStackStatusCallback(status); \
-  emberAfPluginOtaClientStackStatusCallback(status); \
   emberAfPluginReportingStackStatusCallback(status); \
+  emberAfPluginOtaClientStackStatusCallback(status); \
+  emberAfPluginNetworkSteeringStackStatusCallback(status); \
+  emberAfPluginConnectionManagerStackStatusCallback(status); \
 
 
 #define EMBER_AF_GENERATED_PLUGIN_ZDO_MESSAGE_RECEIVED_FUNCTION_DECLARATIONS \
@@ -347,6 +347,12 @@ PGM EmberAfGenericClusterFunction emberAfFuncArrayOtaBootloadClusterClient[] = {
     { 0x0021, 0x0B, COMMAND_MASK_INCOMING_CLIENT }, /* Green Power / GpProxyTableRequest */ \
   }
 #define EMBER_AF_GENERATED_COMMAND_COUNT (39)
+
+// Command manufacturer codes
+#define GENERATED_COMMAND_MANUFACTURER_CODES {      \
+{0x00, 0x00} \
+  }
+#define GENERATED_COMMAND_MANUFACTURER_CODE_COUNT (0)
 
 
 // Generated reporting configuration defaults

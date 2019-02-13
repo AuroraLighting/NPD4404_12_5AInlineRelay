@@ -60,7 +60,7 @@ EmberAfStatus emberAfClusterSpecificCommandParse(EmberAfClusterCommand *cmd)
     }
   } else if (cmd->direction == (uint8_t)ZCL_DIRECTION_CLIENT_TO_SERVER
              && emberAfContainsServer(cmd->apsFrame->destinationEndpoint,
-                                      cmd->apsFrame->clusterId)) {
+                                       cmd->apsFrame->clusterId)) {
     switch (cmd->apsFrame->clusterId) {
     case ZCL_BASIC_CLUSTER_ID:
       result = emberAfBasicClusterServerCommandParse(cmd);
