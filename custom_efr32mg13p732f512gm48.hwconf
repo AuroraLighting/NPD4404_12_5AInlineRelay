@@ -52,6 +52,7 @@
     <property object="USART1" propertyId="USART.BSP_USART_MOSI.PIN" value="PA0"/>
     <property object="USART1" propertyId="USART.BSP_USART_RX.PIN" value="PA1"/>
     <property object="USART1" propertyId="USART.BSP_USART_TX.PIN" value="PA0"/>
+    <property object="USART1" propertyId="USART.HAL_USART_BAUD_RATE.INT" value="9600"/>
     <property object="USART1" propertyId="USART.HAL_USART_RXSTART.INT" value="16"/>
     <property object="USART1" propertyId="USART.HAL_USART_RXSTOP.INT" value="16"/>
     <property object="USART1" propertyId="USART.HAL_USART_RX_QUEUE_SIZE.INT" value="128"/>

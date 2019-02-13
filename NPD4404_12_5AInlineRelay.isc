@@ -16,14 +16,14 @@ GenerationDirectory:PATH(ABSOLUTE):C:\SiliconLabs\SimplicityStudio\v4\developer\
 #  identifier, as it will be used in both generated variable, macros, as well as
 #  file names. You should generally not use characters which are not valid
 #  characters in a C identifier here.
-DeviceName:NPDXXXXProductTemplate
+DeviceName:NPD4404_12_5AInlineRelay
 
 #  Type of the endpoint. Each endpoint implement one endpoint type. There can be
 #  one or more endpoint types, regardless of number of actual endpoints.
-EndpointType:Primary,257
+EndpointType:Primary,256
 
 #  The ZCL device that this particular endpoint is implementing.
-DeviceType:Primary,HA-light
+DeviceType:Primary,HA-onofflight
 
 #  Overrides a particular client configuration. This happens when you have
 #  chosen to include/exclude a client cluster that is optional. Contains
@@ -60,7 +60,7 @@ FlashAttributes:0,19,server,0
 ReportableAttributes:0,4,server,0
 
 #  User defined default values for attributes.
-AttributeDefaults:6,0,server,0,0x01:8,0,server,0,0xfe:0,5,server,0,FWMPROZXBulb50AU:0,10,server,0,NPD3920:0,7,server,0,1:0,4,server,0,Aurora:0,11,server,0,www.auroralighting.com
+AttributeDefaults:6,0,server,0,0x00:8,0,server,0,0xfe:0,5,server,0,12.5ARelay51AU:0,10,server,0,NPD4404:0,7,server,0,1:0,4,server,0,Aurora:0,11,server,0,www.auroralighting.com:0,1,server,0,0x01:0,2,server,0,0x02:0,3,server,0,0x01:0,6,server,0,20190230:25,0,client,0,0x0:25,1,client,0,0x0:25,2,client,0,0x00000001:25,7,client,0,0x121C:25,8,client,0,0x1411
 
 #  Lists the channels that this application will be configured to use.
 Channels:11
@@ -286,7 +286,7 @@ compile,OTA_BOOTLOAD_CLUSTER
 lastArchitectureId=efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]+gcc
 featureLevel=1
 active=true
-lastHwConfFileUsed=PATH(STACK_RELATIVE):app/builder/NPDXXXXProductTemplate/custom_efr32mg13p732f512gm48.hwconf
+lastHwConfFileUsed=PATH(STACK_RELATIVE):app/builder/NPD4404_12_5AInlineRelay/custom_efr32mg13p732f512gm48.hwconf
 }
 {setupId:information
 }
@@ -1083,4 +1083,10 @@ AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID,5121
 
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,14
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]~!module+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID,5137
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]~!module+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,1
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]~!module+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_HARDWARE_VERSION,1
 
