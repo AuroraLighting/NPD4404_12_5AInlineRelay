@@ -45,7 +45,6 @@ static bool s_zigbeeChangePending = false;         // Set to TRUE when the Zigbe
 static bool s_indicateJoiningSequence = false;     // Set TRUE when we want any subsequent Joining to be indicated, FALSE otherwise
 static bool s_indicateJoinSuccess = false;         // Set TRUE when we want any subsequent Join success to be indicated, FALSE otherwise
 static bool s_startupComplete = false;             // TRUE when AppStartup() completed
-static bool s_identifyOnOff = true;                // Used to toggle the relay
 
 ///////////////////////////////////////////////////////////////////////////////
 // GLOBAL FUNCTIONS
@@ -68,7 +67,7 @@ bool emberAfMainStartCallback(int* returnCode,
    MCUInit(COM_USART1);
    if(!ResetWasBootloader())
    {
-	  MCURequestOnOffModeRelay(RELAY_OFF);
+      MCURequestOnOffModeRelay(RELAY_OFF);
    }
    return false;
 }
@@ -197,12 +196,7 @@ void emberAfPluginIdentifyStartFeedbackCallback(u8 endpoint,
    {
       if(RELAY_ENDPOINT == endpoint)
       {
-         u8 onOff = ClusterReadOnOff(RELAY_ENDPOINT);
-    	 if(!onOff)
-    	 {
-            ClusterWriteOnOff(RELAY_ENDPOINT, TRUE);
-    	 }
-    	 s_uiActive = true;
+         s_uiActive = true;
          emberEventControlSetDelayMS(eventIdentifyControl, 1000);
       }
    }
@@ -217,10 +211,8 @@ void emberAfPluginIdentifyStopFeedbackCallback(u8 endpoint)
 
       if(RELAY_ENDPOINT == endpoint)
       {
-         MCURequestOnOffModeRelay(RELAY_OFF);
-    	 s_uiActive = false;
+         s_uiActive = false;
          s_zigbeeChangePending = true;
-         s_identifyOnOff = true;
          emberEventControlSetInactive(eventIdentifyControl);
       }
    }
@@ -229,8 +221,10 @@ void emberAfPluginIdentifyStopFeedbackCallback(u8 endpoint)
 // Called every 1000ms during identify
 void eventIdentifyCallback()
 {
-   s_identifyOnOff = !s_identifyOnOff;
+   static bool s_identifyOnOff = false;
+
    MCURequestOnOffModeRelay(s_identifyOnOff);
+   s_identifyOnOff = !s_identifyOnOff;
    s_uiActive = true;
    s_uiActiveStartTimeMs = halCommonGetInt32uMillisecondTick();
    emberEventControlSetDelayMS(eventIdentifyControl, 1000);

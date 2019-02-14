@@ -25573,95 +25573,17 @@ bool emberAfMfglibClusterToneCallback(uint8_t channel,
 /** @} END MFGLIB Cluster Cluster Callbacks */
 
 
-/** @name Basic Server Cluster Plugin Callbacks */
+/** @name OTA Simple Storage EEPROM Driver Plugin Callbacks */
 // @{
 
-/** @brief Reset To Factory Defaults
+/** @brief Erase Complete
  *
- * This function is called by the Basic server plugin when a request to reset
- * to factory defaults is received. The plugin will reset attributes managed by
- * the framework to their default values. The application should perform any
- * other necessary reset-related operations in this callback, including
- * resetting any externally-stored attributes.
+ * This is called when an EEPROM erase operation has completed.
  *
- * @param endpoint   Ver.: always
+ * @param success The result of the erase operation. Ver.: always
  */
-void emberAfPluginBasicResetToFactoryDefaultsCallback(uint8_t endpoint);
-/** @} END Basic Server Cluster Plugin Callbacks */
-
-
-/** @name Connection Manager Plugin Callbacks */
-// @{
-
-/** @brief Network join finished
- *
- * This callback is fired when the Connection Manager plugin is finished with
- * the network search process. The result of the operation will be returned as
- * the status parameter.
- *
- * @param status   Ver.: always
- */
-void emberAfPluginConnectionManagerFinishedCallback(EmberStatus status);
-/** @brief Begin searching for network to join
- *
- * This function is called by the Connection Manager Plugin when it starts
- * to search for a new network.  It is normally used to trigger a UI event to
- * notify the user that the device is currently searching for a network.
- */
-void emberAfPluginConnectionManagerStartNetworkSearchCallback(void);
-/** @brief Leave the currently joined network
- *
- * This function is called by the Connection Manager Plugin when the device
- * is about to leave the network.  It is normally used to trigger a UI event to
- * notify the user of a network leave.
- */
-void emberAfPluginConnectionManagerLeaveNetworkCallback(void);
-/** @} END Connection Manager Plugin Callbacks */
-
-
-/** @name Counters Plugin Callbacks */
-// @{
-
-/** @brief Rollover
- *
- * This function is called every time a counter exceeds its threshold.
- *
- * @param type The counter that rolled over Ver.: always
- */
-void emberAfPluginCountersRolloverCallback(EmberCounterType type);
-/** @} END Counters Plugin Callbacks */
-
-
-/** @name Form and Join Library Plugin Callbacks */
-// @{
-
-/** @brief Network Found
- *
- * This is called by the form-and-join library to notify the application of the
- * network found after a call to ::emberScanForJoinableNetwork() or
- * ::emberScanForNextJoinableNetwork(). See form-and-join documentation for
- * more information.
- *
- * @param networkFound   Ver.: always
- * @param lqi   Ver.: always
- * @param rssi   Ver.: always
- */
-void emberAfPluginFormAndJoinNetworkFoundCallback(EmberZigbeeNetwork *networkFound,
-                                                  uint8_t lqi,
-                                                  int8_t rssi);
-/** @brief Unused Pan Id Found
- *
- * This function is called when the form-and-join library finds an unused PAN
- * ID that can be used to form a new network on.
- *
- * @param panId A randomly generated PAN ID without other devices on it.
- * Ver.: always
- * @param channel The channel where the PAN ID can be used to form a new
- * network. Ver.: always
- */
-void emberAfPluginFormAndJoinUnusedPanIdFoundCallback(EmberPanId panId,
-                                                      uint8_t channel);
-/** @} END Form and Join Library Plugin Callbacks */
+void emberAfPluginOtaStorageSimpleEepromEraseCompleteCallback(bool success);
+/** @} END OTA Simple Storage EEPROM Driver Plugin Callbacks */
 
 
 /** @name Groups Server Cluster Plugin Callbacks */
@@ -25700,6 +25622,39 @@ bool emberAfPluginGroupsServerGroupNamesSupportedCallback(uint8_t endpoint);
 /** @} END Groups Server Cluster Plugin Callbacks */
 
 
+/** @name Reporting Plugin Callbacks */
+// @{
+
+/** @brief Configured
+ *
+ * This callback is called by the Reporting plugin whenever a reporting entry
+ * is configured, including when entries are deleted or updated. The
+ * application can use this callback for scheduling readings or measurements
+ * based on the minimum and maximum reporting interval for the entry. The
+ * application should return EMBER_ZCL_STATUS_SUCCESS if it can support the
+ * configuration or an error status otherwise. Note: attribute reporting is
+ * required for many clusters and attributes, so rejecting a reporting
+ * configuration may violate ZigBee specifications.
+ *
+ * @param entry   Ver.: always
+ */
+EmberAfStatus emberAfPluginReportingConfiguredCallback(const EmberAfPluginReportingEntry *entry);
+/** @brief Configured
+ *
+ * This callback is called by the Reporting plugin to get the default reporting
+ * configuration values from user if there is no default value available within
+ * af generated default reporting configuration tabel. The application need to
+ * write to the minInterval, maxInterval and reportable change in the passed
+ * IO pointer in the arguement while handleing this callback, then application
+ * shall return true if it has provided the default values or else false for
+ * reporting plugin to further handleing.
+ *
+ * @param entry   Ver.: always
+ */
+bool emberAfPluginReportingGetDefaultReportingConfigCallback(EmberAfPluginReportingEntry *entry);
+/** @} END Reporting Plugin Callbacks */
+
+
 /** @name Identify Cluster Plugin Callbacks */
 // @{
 
@@ -25728,6 +25683,68 @@ void emberAfPluginIdentifyStartFeedbackCallback(uint8_t endpoint,
  */
 void emberAfPluginIdentifyStopFeedbackCallback(uint8_t endpoint);
 /** @} END Identify Cluster Plugin Callbacks */
+
+
+/** @name On/Off Server Cluster Plugin Callbacks */
+// @{
+
+/** @brief On/off Cluster Server Post Init
+ *
+ * Following resolution of the On/Off state at startup for this endpoint, perform any
+ * additional initialization needed; e.g., synchronize hardware state.
+ *
+ * @param endpoint Endpoint that is being initialized  Ver.: always
+ */
+void emberAfPluginOnOffClusterServerPostInitCallback(uint8_t endpoint);
+/** @} END On/Off Server Cluster Plugin Callbacks */
+
+
+/** @name Update TC Link Key Plugin Callbacks */
+// @{
+
+/** @brief Status
+ *
+ * This callback is fired when the Update Link Key exchange process is updated
+ * with a status from the stack. Implementations should return true if they are
+ * done receiving updates from the stack.
+ *
+ * @param keyStatus An ::EmberKeyStatus value describing the success or failure
+ * of the key exchange process. Ver.: always
+ */
+bool emberAfPluginUpdateTcLinkKeyStatusCallback(EmberKeyStatus keyStatus);
+/** @} END Update TC Link Key Plugin Callbacks */
+
+
+/** @name Form and Join Library Plugin Callbacks */
+// @{
+
+/** @brief Network Found
+ *
+ * This is called by the form-and-join library to notify the application of the
+ * network found after a call to ::emberScanForJoinableNetwork() or
+ * ::emberScanForNextJoinableNetwork(). See form-and-join documentation for
+ * more information.
+ *
+ * @param networkFound   Ver.: always
+ * @param lqi   Ver.: always
+ * @param rssi   Ver.: always
+ */
+void emberAfPluginFormAndJoinNetworkFoundCallback(EmberZigbeeNetwork *networkFound,
+                                                  uint8_t lqi,
+                                                  int8_t rssi);
+/** @brief Unused Pan Id Found
+ *
+ * This function is called when the form-and-join library finds an unused PAN
+ * ID that can be used to form a new network on.
+ *
+ * @param panId A randomly generated PAN ID without other devices on it.
+ * Ver.: always
+ * @param channel The channel where the PAN ID can be used to form a new
+ * network. Ver.: always
+ */
+void emberAfPluginFormAndJoinUnusedPanIdFoundCallback(EmberPanId panId,
+                                                      uint8_t channel);
+/** @} END Form and Join Library Plugin Callbacks */
 
 
 /** @name Network Steering Plugin Callbacks */
@@ -25787,80 +25804,63 @@ EmberNodeType emberAfPluginNetworkSteeringGetNodeTypeCallback(EmberAfPluginNetwo
 /** @} END Network Steering Plugin Callbacks */
 
 
-/** @name On/Off Server Cluster Plugin Callbacks */
+/** @name Connection Manager Plugin Callbacks */
 // @{
 
-/** @brief On/off Cluster Server Post Init
+/** @brief Network join finished
  *
- * Following resolution of the On/Off state at startup for this endpoint, perform any
- * additional initialization needed; e.g., synchronize hardware state.
+ * This callback is fired when the Connection Manager plugin is finished with
+ * the network search process. The result of the operation will be returned as
+ * the status parameter.
  *
- * @param endpoint Endpoint that is being initialized  Ver.: always
+ * @param status   Ver.: always
  */
-void emberAfPluginOnOffClusterServerPostInitCallback(uint8_t endpoint);
-/** @} END On/Off Server Cluster Plugin Callbacks */
+void emberAfPluginConnectionManagerFinishedCallback(EmberStatus status);
+/** @brief Begin searching for network to join
+ *
+ * This function is called by the Connection Manager Plugin when it starts
+ * to search for a new network.  It is normally used to trigger a UI event to
+ * notify the user that the device is currently searching for a network.
+ */
+void emberAfPluginConnectionManagerStartNetworkSearchCallback(void);
+/** @brief Leave the currently joined network
+ *
+ * This function is called by the Connection Manager Plugin when the device
+ * is about to leave the network.  It is normally used to trigger a UI event to
+ * notify the user of a network leave.
+ */
+void emberAfPluginConnectionManagerLeaveNetworkCallback(void);
+/** @} END Connection Manager Plugin Callbacks */
 
 
-/** @name OTA Simple Storage EEPROM Driver Plugin Callbacks */
+/** @name Counters Plugin Callbacks */
 // @{
 
-/** @brief Erase Complete
+/** @brief Rollover
  *
- * This is called when an EEPROM erase operation has completed.
+ * This function is called every time a counter exceeds its threshold.
  *
- * @param success The result of the erase operation. Ver.: always
+ * @param type The counter that rolled over Ver.: always
  */
-void emberAfPluginOtaStorageSimpleEepromEraseCompleteCallback(bool success);
-/** @} END OTA Simple Storage EEPROM Driver Plugin Callbacks */
+void emberAfPluginCountersRolloverCallback(EmberCounterType type);
+/** @} END Counters Plugin Callbacks */
 
 
-/** @name Reporting Plugin Callbacks */
+/** @name Basic Server Cluster Plugin Callbacks */
 // @{
 
-/** @brief Configured
+/** @brief Reset To Factory Defaults
  *
- * This callback is called by the Reporting plugin whenever a reporting entry
- * is configured, including when entries are deleted or updated. The
- * application can use this callback for scheduling readings or measurements
- * based on the minimum and maximum reporting interval for the entry. The
- * application should return EMBER_ZCL_STATUS_SUCCESS if it can support the
- * configuration or an error status otherwise. Note: attribute reporting is
- * required for many clusters and attributes, so rejecting a reporting
- * configuration may violate ZigBee specifications.
+ * This function is called by the Basic server plugin when a request to reset
+ * to factory defaults is received. The plugin will reset attributes managed by
+ * the framework to their default values. The application should perform any
+ * other necessary reset-related operations in this callback, including
+ * resetting any externally-stored attributes.
  *
- * @param entry   Ver.: always
+ * @param endpoint   Ver.: always
  */
-EmberAfStatus emberAfPluginReportingConfiguredCallback(const EmberAfPluginReportingEntry *entry);
-/** @brief Configured
- *
- * This callback is called by the Reporting plugin to get the default reporting
- * configuration values from user if there is no default value available within
- * af generated default reporting configuration tabel. The application need to
- * write to the minInterval, maxInterval and reportable change in the passed
- * IO pointer in the arguement while handleing this callback, then application
- * shall return true if it has provided the default values or else false for
- * reporting plugin to further handleing.
- *
- * @param entry   Ver.: always
- */
-bool emberAfPluginReportingGetDefaultReportingConfigCallback(EmberAfPluginReportingEntry *entry);
-/** @} END Reporting Plugin Callbacks */
-
-
-/** @name Update TC Link Key Plugin Callbacks */
-// @{
-
-/** @brief Status
- *
- * This callback is fired when the Update Link Key exchange process is updated
- * with a status from the stack. Implementations should return true if they are
- * done receiving updates from the stack.
- *
- * @param keyStatus An ::EmberKeyStatus value describing the success or failure
- * of the key exchange process. Ver.: always
- */
-bool emberAfPluginUpdateTcLinkKeyStatusCallback(EmberKeyStatus keyStatus);
-/** @} END Update TC Link Key Plugin Callbacks */
+void emberAfPluginBasicResetToFactoryDefaultsCallback(uint8_t endpoint);
+/** @} END Basic Server Cluster Plugin Callbacks */
 
 
 /** @} END addtogroup */

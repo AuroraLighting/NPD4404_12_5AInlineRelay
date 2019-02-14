@@ -215,8 +215,8 @@ CDEFS = -DLOCAL_STORAGE_GECKO_INFO_PAGE_BTL \
   -DEMBER_AF_API_AF_HEADER=\"app/framework/include/af.h\" \
   -DEMBER_AF_API_AF_SECURITY_HEADER=\"app/framework/security/af-security.h\" \
   -DEMBER_STACK_ZIGBEE \
-  -DEMLIB_USER_CONFIG \
   -DEMBER_PARAMETERIZED_BROADCAST_TABLE \
+  -DEMLIB_USER_CONFIG \
   -DPHY_RAIL \
   -DAPPLICATION_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/afv2-token.h\" \
   -DAPPLICATION_MFG_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/afv2-mfg-token.h\" \
@@ -243,8 +243,8 @@ ASMDEFS = -DLOCAL_STORAGE_GECKO_INFO_PAGE_BTL \
   -DEMBER_AF_API_AF_HEADER=\"app/framework/include/af.h\" \
   -DEMBER_AF_API_AF_SECURITY_HEADER=\"app/framework/security/af-security.h\" \
   -DEMBER_STACK_ZIGBEE \
-  -DEMLIB_USER_CONFIG \
   -DEMBER_PARAMETERIZED_BROADCAST_TABLE \
+  -DEMLIB_USER_CONFIG \
   -DPHY_RAIL \
   -DAPPLICATION_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/afv2-token.h\" \
   -DAPPLICATION_MFG_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/afv2-mfg-token.h\" \
@@ -287,11 +287,11 @@ CINC = -I./ \
 -I../../../hardware/kit/common/bsp \
   -I../../../platform/bootloader \
   -Ihal-config \
-  -I../../../platform/radio/rail_lib/protocol/ieee802154 \
-  -I../../../platform/radio/rail_lib/protocol/ble \
   -I../../../platform/radio/rail_lib/common \
   -I../../../platform/radio/rail_lib/chip/efr32/rf/common/cortex \
   -I../../../platform/radio/rail_lib/chip/efr32 \
+  -I../../../platform/radio/rail_lib/protocol/ieee802154 \
+  -I../../../platform/radio/rail_lib/protocol/ble \
  \
 
 TARGET = NPD4404_12_5AInlineRelay
