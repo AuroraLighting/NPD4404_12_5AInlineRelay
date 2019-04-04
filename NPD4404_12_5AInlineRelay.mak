@@ -3,7 +3,7 @@ ARCHITECTURE_DIR = efr32
 BUILD_DIR = build
 OUTPUT_DIR = $(BUILD_DIR)/$(ARCHITECTURE_DIR)
 LST_DIR = lst
-PROJECTNAME = NPDXXXXProductTemplate
+PROJECTNAME = NPD4404_12_5AInlineRelay
 
 # Stack and submodule directories
 GLOBAL_BASE_DIR     = ../../../platform/base/hal/..
@@ -134,7 +134,6 @@ SOURCE_FILES = \
 ../../../protocol\zigbee\app\framework\plugin\identify\identify.c \
 ../../../protocol\zigbee\app\framework\plugin\identify\identify-cli.c \
 ../../../util\plugin\plugin-common\led-blink\led-blink.c \
-../../../protocol\zigbee\app\framework\plugin\level-control\level-control.c \
 ../../../protocol\zigbee\app\framework\plugin\manufacturing-library-cli\manufacturing-library-cli-soc.c \
 ../../../protocol\zigbee\app\framework\plugin\network-steering\network-steering.c \
 ../../../protocol\zigbee\app\framework\plugin\network-steering\network-steering-cli.c \
@@ -165,7 +164,7 @@ SOURCE_FILES = \
 ../../../protocol\zigbee\app\framework\plugin\simple-main\simple-main.c \
 ../../../protocol\zigbee\app\framework\plugin\update-tc-link-key\update-tc-link-key.c \
  \
-../../../app/builder/NPDXXXXProductTemplate/NPDXXXXProductTemplate_callbacks.c \ \
+../../../app/builder/NPD4404_12_5AInlineRelay/NPD4404_12_5AInlineRelay_callbacks.c \ \
 
 LIB_FILES = \
  \
@@ -204,23 +203,23 @@ CDEFS = -DLOCAL_STORAGE_GECKO_INFO_PAGE_BTL \
 -DPHY_RAIL \
 -DEFR32MG13P \
 -DEFR32MG13P732F512GM48 \
--DATTRIBUTE_STORAGE_CONFIGURATION=\"app/builder/NPDXXXXProductTemplate/NPDXXXXProductTemplate_endpoint_config.h\" \
+-DATTRIBUTE_STORAGE_CONFIGURATION=\"app/builder/NPD4404_12_5AInlineRelay/NPD4404_12_5AInlineRelay_endpoint_config.h\" \
 -DCONFIGURATION_HEADER=\"app/framework/util/config.h\" \
--DGENERATED_TOKEN_HEADER=\"app/builder/NPDXXXXProductTemplate/NPDXXXXProductTemplate_tokens.h\" \
+-DGENERATED_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/NPD4404_12_5AInlineRelay_tokens.h\" \
 -DPLATFORM_HEADER=\"platform/base/hal/micro/cortexm3/compiler/gcc.h\" \
--DZA_GENERATED_HEADER=\"app/builder/NPDXXXXProductTemplate/NPDXXXXProductTemplate.h\" \
+-DZA_GENERATED_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/NPD4404_12_5AInlineRelay.h\" \
   -DHAL_CONFIG=1 \
   -DEMBER_AF_USE_HWCONF \
-  -DEMLIB_USER_CONFIG \
-  -DEMBER_PARAMETERIZED_BROADCAST_TABLE \
   -DEMBER_AF_API_EMBER_TYPES=\"stack/include/ember-types.h\" \
   -DEMBER_AF_API_DEBUG_PRINT=\"app/framework/util/print.h\" \
   -DEMBER_AF_API_AF_HEADER=\"app/framework/include/af.h\" \
   -DEMBER_AF_API_AF_SECURITY_HEADER=\"app/framework/security/af-security.h\" \
   -DEMBER_STACK_ZIGBEE \
+  -DEMBER_PARAMETERIZED_BROADCAST_TABLE \
+  -DEMLIB_USER_CONFIG \
   -DPHY_RAIL \
-  -DAPPLICATION_TOKEN_HEADER=\"app/builder/NPDXXXXProductTemplate/afv2-token.h\" \
-  -DAPPLICATION_MFG_TOKEN_HEADER=\"app/builder/NPDXXXXProductTemplate/afv2-mfg-token.h\" \
+  -DAPPLICATION_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/afv2-token.h\" \
+  -DAPPLICATION_MFG_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/afv2-mfg-token.h\" \
  \
 
 ASMDEFS = -DLOCAL_STORAGE_GECKO_INFO_PAGE_BTL \
@@ -232,23 +231,23 @@ ASMDEFS = -DLOCAL_STORAGE_GECKO_INFO_PAGE_BTL \
 -DPHY_RAIL \
 -DEFR32MG13P \
 -DEFR32MG13P732F512GM48 \
--DATTRIBUTE_STORAGE_CONFIGURATION=\"app/builder/NPDXXXXProductTemplate/NPDXXXXProductTemplate_endpoint_config.h\" \
+-DATTRIBUTE_STORAGE_CONFIGURATION=\"app/builder/NPD4404_12_5AInlineRelay/NPD4404_12_5AInlineRelay_endpoint_config.h\" \
 -DCONFIGURATION_HEADER=\"app/framework/util/config.h\" \
--DGENERATED_TOKEN_HEADER=\"app/builder/NPDXXXXProductTemplate/NPDXXXXProductTemplate_tokens.h\" \
+-DGENERATED_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/NPD4404_12_5AInlineRelay_tokens.h\" \
 -DPLATFORM_HEADER=\"platform/base/hal/micro/cortexm3/compiler/gcc.h\" \
--DZA_GENERATED_HEADER=\"app/builder/NPDXXXXProductTemplate/NPDXXXXProductTemplate.h\" \
+-DZA_GENERATED_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/NPD4404_12_5AInlineRelay.h\" \
   -DHAL_CONFIG=1 \
   -DEMBER_AF_USE_HWCONF \
-  -DEMLIB_USER_CONFIG \
-  -DEMBER_PARAMETERIZED_BROADCAST_TABLE \
   -DEMBER_AF_API_EMBER_TYPES=\"stack/include/ember-types.h\" \
   -DEMBER_AF_API_DEBUG_PRINT=\"app/framework/util/print.h\" \
   -DEMBER_AF_API_AF_HEADER=\"app/framework/include/af.h\" \
   -DEMBER_AF_API_AF_SECURITY_HEADER=\"app/framework/security/af-security.h\" \
   -DEMBER_STACK_ZIGBEE \
+  -DEMBER_PARAMETERIZED_BROADCAST_TABLE \
+  -DEMLIB_USER_CONFIG \
   -DPHY_RAIL \
-  -DAPPLICATION_TOKEN_HEADER=\"app/builder/NPDXXXXProductTemplate/afv2-token.h\" \
-  -DAPPLICATION_MFG_TOKEN_HEADER=\"app/builder/NPDXXXXProductTemplate/afv2-mfg-token.h\" \
+  -DAPPLICATION_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/afv2-token.h\" \
+  -DAPPLICATION_MFG_TOKEN_HEADER=\"app/builder/NPD4404_12_5AInlineRelay/afv2-mfg-token.h\" \
  \
 
 CINC = -I./ \
@@ -288,14 +287,14 @@ CINC = -I./ \
 -I../../../hardware/kit/common/bsp \
   -I../../../platform/bootloader \
   -Ihal-config \
+  -I../../../platform/radio/rail_lib/protocol/ieee802154 \
+  -I../../../platform/radio/rail_lib/protocol/ble \
   -I../../../platform/radio/rail_lib/common \
   -I../../../platform/radio/rail_lib/chip/efr32/rf/common/cortex \
   -I../../../platform/radio/rail_lib/chip/efr32 \
-  -I../../../platform/radio/rail_lib/protocol/ieee802154 \
-  -I../../../platform/radio/rail_lib/protocol/ble \
  \
 
-TARGET = NPDXXXXProductTemplate
+TARGET = NPD4404_12_5AInlineRelay
 
 CSOURCES = $(filter %.c, $(SOURCE_FILES))
 ASMSOURCES = $(filter %.s79, $(SOURCE_FILES))

@@ -252,7 +252,7 @@
 #define BSP_USART1_TX_LOC                        (0U)
 
 #define HAL_USART1_RX_QUEUE_SIZE                 (128UL)
-#define HAL_USART1_BAUD_RATE                     (115200UL)
+#define HAL_USART1_BAUD_RATE                     (9600UL)
 #define HAL_USART1_RXSTOP                        (16UL)
 #define HAL_USART1_RXSTART                       (16UL)
 #define HAL_USART1_TX_QUEUE_SIZE                 (128UL)

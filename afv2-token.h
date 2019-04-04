@@ -9,8 +9,8 @@
 // Token header for the token.properties.
 #include "protocol/zigbee/app/framework/util/tokens.h"
 
-// Token header for the Connection Manager plugin.
-#include "protocol/zigbee/app/framework/plugin-soc/connection-manager/connection-manager-tokens.h"
+// Token header for the Scenes Server Cluster plugin.
+#include "protocol/zigbee/app/framework/plugin/scenes/scenes-tokens.h"
 
 // Token header for the Manufacturing Library CLI plugin.
 #include "protocol/zigbee/app/framework/plugin/manufacturing-library-cli/manufacturing-library-cli-tokens.h"
@@ -18,11 +18,11 @@
 // Token header for the Reporting plugin.
 #include "protocol/zigbee/app/framework/plugin/reporting/reporting-tokens.h"
 
-// Token header for the Scenes Server Cluster plugin.
-#include "protocol/zigbee/app/framework/plugin/scenes/scenes-tokens.h"
+// Token header for the Connection Manager plugin.
+#include "protocol/zigbee/app/framework/plugin-soc/connection-manager/connection-manager-tokens.h"
 
 // Custom token header file
-#include "app/builder/NPDXXXXProductTemplate/app-tokens.h"
+#include "app/builder/NPD4404_12_5AInlineRelay/app-tokens.h"
 
 #ifdef CUSTOM_TOKEN_HEADER
   #include CUSTOM_TOKEN_HEADER

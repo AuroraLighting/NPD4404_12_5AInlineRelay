@@ -24,7 +24,7 @@
 #define START_UP_DELAY_MS              0
 #define MCU_COMMAND_INTERVAL_MS        100
 #define UI_ACTIVE_TIME_MS              5000
-#define LIGHT_ENDPOINT                 1
+#define RELAY_ENDPOINT                 1
 #define HIVE_SUPPORT                   true
 
 // Globals
@@ -43,7 +43,6 @@ static bool s_uiActive = false;                    // TRUE if UI is active indic
 static u32 s_uiActiveStartTimeMs = 0;              // The time the UI activated
 static bool s_zigbeeChangePending = false;         // Set to TRUE when the Zigbee domain has changed, and we need to update the MCU
 static bool s_indicateJoiningSequence = false;     // Set TRUE when we want any subsequent Joining to be indicated, FALSE otherwise
-static bool s_indicateJoinSuccess = false;         // Set TRUE when we want any subsequent Join success to be indicated, FALSE otherwise
 static bool s_startupComplete = false;             // TRUE when AppStartup() completed
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,13 +52,10 @@ static bool s_startupComplete = false;             // TRUE when AppStartup() com
 // Called once of initialisation
 void emberAfMainInitCallback(void)
 {
-   TRACE(TRACE_APP, "*******************************\r\n");
-   TRACE(TRACE_APP, "APP: NPD3920 Fixed White MPro\r\n");
+   TRACE(TRACE_APP, "***********************************\r\n");
+   TRACE(TRACE_APP, "APP: NPD4404 12.5A Relay Controller\r\n");
    TRACE(TRACE_APP, "APP: Version: %x (%d)\r\n", EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION);
-   TRACE(TRACE_APP, "*******************************\r\n");
-#if NPD3700_HW
-   GPIO_PinModeSet(STATUS_LED_PORT, STATUS_LED_PIN, gpioModePushPull, 0);
-#endif
+   TRACE(TRACE_APP, "***********************************\r\n");
 }
 
 // Called once after HAL initialisation but before stack starts
@@ -68,11 +64,9 @@ bool emberAfMainStartCallback(int* returnCode,
                               char** argv)
 {
    MCUInit(COM_USART1);
-
-   // The soonest we can put the light on, we do
    if(!ResetWasBootloader())
    {
-      MCURequestLevelModeSingleColour(LIGHT_LEVEL_MAX_ZCL);
+      MCURequestOnOffModeRelay(RELAY_OFF);
    }
    return false;
 }
@@ -104,7 +98,6 @@ void emberAfMainTickCallback(void)
             s_uiActive = false;
             s_uiActiveStartTimeMs = 0;
             s_zigbeeChangePending = true;
-            TRACE(TRACE_APP, "APP: UI Sequence Stopped, restoring light levels from Zigbee Cluster\r\n");
          }
       }
       else
@@ -136,18 +129,8 @@ void emberAfPluginConnectionManagerFinishedCallback(EmberStatus status)
    //if success, blink STATUS LED once
    if (emberAfNetworkState() == EMBER_JOINED_NETWORK)
    {
-      ClusterSetOTAClient(LIGHT_ENDPOINT, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,
-             EMBER_AF_MANUFACTURER_CODE , EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID);
-
-      if(s_indicateJoinSuccess)
-      {
-         s_indicateJoinSuccess = false;
-         TRACE(TRACE_ZIGBEE, "ZIGBEE: Join OK\r\n");
-         s_uiActive = true;
-         s_uiActiveStartTimeMs = halCommonGetInt32uMillisecondTick();
-         MCURequestFlash(1);
-         s_zigbeeChangePending = true;
-      }
+      ClusterSetOTAClient(RELAY_ENDPOINT, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,
+          EMBER_AF_MANUFACTURER_CODE, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID);
    }
    else
    {
@@ -163,7 +146,6 @@ void emberAfPluginConnectionManagerLeaveNetworkCallback()
 {
    TRACE(TRACE_ZIGBEE, "ZIGBEE: %s()\r\n", __FUNCTION__);
    s_indicateJoiningSequence = true;    // The next join should be indicated to the user
-   s_indicateJoinSuccess = true;
 }
 
 // Called by the Connection Manager Plugin when it starts
@@ -179,8 +161,6 @@ void emberAfPluginConnectionManagerStartNetworkSearchCallback()
       s_indicateJoiningSequence = false;
       s_uiActive = true;
       s_uiActiveStartTimeMs = halCommonGetInt32uMillisecondTick();
-      MCURequestFlash(2);
-      s_zigbeeChangePending = true;
    }
 }
 
@@ -192,17 +172,7 @@ void emberAfOnOffClusterServerAttributeChangedCallback(uint8_t endpoint,
 
    if (ZCL_ON_OFF_ATTRIBUTE_ID == attributeId)
    {
-      s_zigbeeChangePending = true;
-   }
-}
-
-// Called when the Level control cluster has changed
-void emberAfLevelControlClusterServerAttributeChangedCallback(int8u endpoint,
-      EmberAfAttributeId attributeId)
-{
-   if (ZCL_CURRENT_LEVEL_ATTRIBUTE_ID == attributeId)
-   {
-      s_zigbeeChangePending = true;
+	  s_zigbeeChangePending = true;
    }
 }
 
@@ -214,7 +184,7 @@ void emberAfPluginIdentifyStartFeedbackCallback(u8 endpoint,
 
    if(s_startupComplete)
    {
-      if(LIGHT_ENDPOINT == endpoint)
+      if(RELAY_ENDPOINT == endpoint)
       {
          s_uiActive = true;
          emberEventControlSetDelayMS(eventIdentifyControl, 1000);
@@ -229,9 +199,8 @@ void emberAfPluginIdentifyStopFeedbackCallback(u8 endpoint)
    {
       TRACE(TRACE_ZIGBEE, "ZIGBEE: %s()\r\n", __FUNCTION__);
 
-      if(LIGHT_ENDPOINT == endpoint)
+      if(RELAY_ENDPOINT == endpoint)
       {
-         MCURequestLevelModeSingleColour(LIGHT_LEVEL_OFF_ZCL);
          s_uiActive = false;
          s_zigbeeChangePending = true;
          emberEventControlSetInactive(eventIdentifyControl);
@@ -242,7 +211,10 @@ void emberAfPluginIdentifyStopFeedbackCallback(u8 endpoint)
 // Called every 1000ms during identify
 void eventIdentifyCallback()
 {
-   MCURequestFlash(1);
+   static bool s_identifyOnOff = false;
+
+   MCURequestOnOffModeRelay(s_identifyOnOff);
+   s_identifyOnOff = !s_identifyOnOff;
    s_uiActive = true;
    s_uiActiveStartTimeMs = halCommonGetInt32uMillisecondTick();
    emberEventControlSetDelayMS(eventIdentifyControl, 1000);
@@ -257,10 +229,8 @@ boolean emberAfPreCommandReceivedCallback(EmberAfClusterCommand* cmd)
    {
       if(cmd->commandId == ZCL_UPGRADE_END_RESPONSE_COMMAND_ID)
       {
-         u8 onOff = ClusterReadOnOff(LIGHT_ENDPOINT);
-         u8 zclLevel = ClusterReadLevel(LIGHT_ENDPOINT);
+         u8 onOff = ClusterReadOnOff(RELAY_ENDPOINT);
          halCommonSetToken(TOKEN_APP_ONOFF_STATE, &onOff);
-         halCommonSetToken(TOKEN_APP_LIGHT_LEVEL, &zclLevel);
       }
    }
    return false; // allow the stack to process
@@ -278,12 +248,10 @@ static void ZigbeeProcess()
 
    if((s_zigbeeChangePending) && (elapsedTimeInt32u(lastZigbeeProcess, nowMs) > MCU_COMMAND_INTERVAL_MS))
    {
-      lastZigbeeProcess = nowMs;
-      u8 onOff = ClusterReadOnOff(LIGHT_ENDPOINT);
-      u8 zclLevel = ClusterReadLevel(LIGHT_ENDPOINT);
-      TRACE(TRACE_APP, "APP: %s() Change Pending. Onoff=%d, level=%x\r\n", __FUNCTION__, onOff, zclLevel);
-      MCURequestLevelModeSingleColour(onOff ? zclLevel : LIGHT_LEVEL_OFF_ZCL);
+      u8 onOff = ClusterReadOnOff(RELAY_ENDPOINT);
+      MCURequestOnOffModeRelay(onOff);
       s_zigbeeChangePending = false;
+      lastZigbeeProcess = nowMs;
    }
 }
 
@@ -299,18 +267,15 @@ static void HiveProcess()
 // Called once on application startup
 static void AppOnStartup()
 {
-   ClusterSetOTAClient(LIGHT_ENDPOINT, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,
-         EMBER_AF_MANUFACTURER_CODE , EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID);
+   ClusterSetOTAClient(RELAY_ENDPOINT, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,
+         EMBER_AF_MANUFACTURER_CODE, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID);
 
    if(ResetWasBootloader())
    {
       u8 onOff = 0;
-      u8 zclLevel = LIGHT_LEVEL_MAX_ZCL;
 
       halCommonGetToken(&onOff, TOKEN_APP_ONOFF_STATE);
-      halCommonGetToken(&zclLevel, TOKEN_APP_LIGHT_LEVEL);
-      ClusterWriteOnOff(LIGHT_ENDPOINT, onOff);
-      ClusterWriteLevel(LIGHT_ENDPOINT, zclLevel);
+      ClusterWriteOnOff(RELAY_ENDPOINT, onOff);
    }
 
    s_zigbeeChangePending = true;
@@ -323,10 +288,9 @@ static void AppReset()
    TRACE(TRACE_APP, "APP: %s()\r\n", __FUNCTION__);
    AppLeaveNetwork();
    emberAfPluginConnectionManagerFactoryReset();
-   ClusterWriteOnOff(LIGHT_ENDPOINT, true);
-   ClusterWriteLevel(LIGHT_ENDPOINT, LIGHT_LEVEL_MAX_ZCL);
-   ClusterSetOTAClient(LIGHT_ENDPOINT, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,
-         EMBER_AF_MANUFACTURER_CODE , EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID);
+   ClusterWriteOnOff(RELAY_ENDPOINT, true);
+   ClusterSetOTAClient(RELAY_ENDPOINT, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,
+      EMBER_AF_MANUFACTURER_CODE, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID);
    s_zigbeeChangePending = true;
 }
 
@@ -336,7 +300,6 @@ static void AppLeaveNetwork()
    TRACE(TRACE_APP, "APP: %s()\r\n", __FUNCTION__);
    emberLeaveNetwork();
    s_indicateJoiningSequence = true;
-   s_indicateJoinSuccess = true;
 }
 
 // Application handler for a RX frame received form the MCU
@@ -360,23 +323,10 @@ static void AppOnRxFrame(u8 *frame)
 // CLI TEST FUNCTIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-void cliLightOnOff(void)
+void cliRelayOnOff(void)
 {
    u8 onOff = (u8)emberUnsignedCommandArgument(0);
-   ClusterWriteOnOff(LIGHT_ENDPOINT, onOff);
-}
-
-void cliLightLevel(void)
-{
-   u8 zclLevel = (u8)emberUnsignedCommandArgument(0);
-   ClusterWriteLevel(LIGHT_ENDPOINT, zclLevel);
-}
-void cliFlash(void)
-{
-   u8 count = (u8)emberUnsignedCommandArgument(0);
-   MCURequestFlash(count);
-   s_uiActive = true;
-   s_uiActiveStartTimeMs = halCommonGetInt32uMillisecondTick();
+   ClusterWriteOnOff(RELAY_ENDPOINT, onOff);
 }
 
 void cliType(void)
@@ -396,9 +346,7 @@ void cliAppReset()
 }
 
 EmberCommandEntry emberAfCustomCommands[] = {
-   emberCommandEntryActionWithDetails("onoff", cliLightOnOff, "u", "Writes on/off cluster <0/1>", NULL),
-   emberCommandEntryActionWithDetails("level", cliLightLevel, "u", "Writes to level Cluster  <level>", NULL),
-   emberCommandEntryActionWithDetails("flash", cliFlash, "u", "Flash light <count>", NULL),
+   emberCommandEntryActionWithDetails("onoff", cliRelayOnOff, "u", "Writes on/off cluster <0/1>", NULL),
    emberCommandEntryActionWithDetails("type", cliType, "", "Request type of luminaire", NULL),
    emberCommandEntryActionWithDetails("version", cliVersion, "", "App FW Version", NULL),
    emberCommandEntryActionWithDetails("appreset", cliAppReset, "", "App Reset", NULL),

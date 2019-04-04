@@ -8,13 +8,13 @@
 
 // Token header for the token.properties.
 
-// Token header for the Connection Manager plugin.
+// Token header for the Scenes Server Cluster plugin.
 
 // Token header for the Manufacturing Library CLI plugin.
 
 // Token header for the Reporting plugin.
 
-// Token header for the Scenes Server Cluster plugin.
+// Token header for the Connection Manager plugin.
 
 #ifdef CUSTOM_TOKEN_HEADER
   #include CUSTOM_TOKEN_HEADER

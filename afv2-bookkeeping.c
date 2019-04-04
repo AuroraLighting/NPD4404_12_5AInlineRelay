@@ -7,25 +7,25 @@
 #include "af.h"
 
 // Init function declarations.
-void emberAfMainInitCallback(void);
 void emberAfInit(void);
+void emberAfMainInitCallback(void);
 
 void emAfInit(void)
 {
-  emberAfMainInitCallback();
   emberAfInit();
+  emberAfMainInitCallback();
 }
 
 // Tick function declarations.
 void emberAfMainTickCallback(void);
-void emberAfTick(void);
 void emberAfPluginHeartbeatTickCallback(void);
+void emberAfTick(void);
 
 void emAfTick(void)
 {
   emberAfMainTickCallback();
-  emberAfTick();
   emberAfPluginHeartbeatTickCallback();
+  emberAfTick();
 }
 
 void emAfResetAttributes(uint8_t endpointId)
@@ -57,13 +57,13 @@ bool emAfRetrieveAttributeAndCraftResponse(uint8_t endpoint, EmberAfClusterId cl
 }
 
 // ZigbeeKeyEstablishment function declarations.
-void emberAfZigbeeKeyEstablishmentCallback(EmberEUI64 partner, EmberKeyStatus status);
 void emberAfPluginUpdateTcLinkKeyZigbeeKeyEstablishmentCallback(EmberEUI64 partner, EmberKeyStatus status);
+void emberAfZigbeeKeyEstablishmentCallback(EmberEUI64 partner, EmberKeyStatus status);
 
 void emAfZigbeeKeyEstablishment(EmberEUI64 partner, EmberKeyStatus status)
 {
-  emberAfZigbeeKeyEstablishmentCallback(partner, status);
   emberAfPluginUpdateTcLinkKeyZigbeeKeyEstablishmentCallback(partner, status);
+  emberAfZigbeeKeyEstablishmentCallback(partner, status);
 }
 
 // ReadAttributesResponse function declarations.
