@@ -43,7 +43,6 @@ static bool s_uiActive = false;                    // TRUE if UI is active indic
 static u32 s_uiActiveStartTimeMs = 0;              // The time the UI activated
 static bool s_zigbeeChangePending = false;         // Set to TRUE when the Zigbee domain has changed, and we need to update the MCU
 static bool s_indicateJoiningSequence = false;     // Set TRUE when we want any subsequent Joining to be indicated, FALSE otherwise
-static bool s_indicateJoinSuccess = false;         // Set TRUE when we want any subsequent Join success to be indicated, FALSE otherwise
 static bool s_startupComplete = false;             // TRUE when AppStartup() completed
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,14 +131,6 @@ void emberAfPluginConnectionManagerFinishedCallback(EmberStatus status)
    {
       ClusterSetOTAClient(RELAY_ENDPOINT, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,
           EMBER_AF_MANUFACTURER_CODE, EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID);
-
-      if(s_indicateJoinSuccess)
-      {
-         s_indicateJoinSuccess = false;
-         TRACE(TRACE_ZIGBEE, "ZIGBEE: Join OK\r\n");
-         s_uiActive = true;
-         s_uiActiveStartTimeMs = halCommonGetInt32uMillisecondTick();
-      }
    }
    else
    {
@@ -155,7 +146,6 @@ void emberAfPluginConnectionManagerLeaveNetworkCallback()
 {
    TRACE(TRACE_ZIGBEE, "ZIGBEE: %s()\r\n", __FUNCTION__);
    s_indicateJoiningSequence = true;    // The next join should be indicated to the user
-   s_indicateJoinSuccess = true;
 }
 
 // Called by the Connection Manager Plugin when it starts
@@ -310,7 +300,6 @@ static void AppLeaveNetwork()
    TRACE(TRACE_APP, "APP: %s()\r\n", __FUNCTION__);
    emberLeaveNetwork();
    s_indicateJoiningSequence = true;
-   s_indicateJoinSuccess = true;
 }
 
 // Application handler for a RX frame received form the MCU

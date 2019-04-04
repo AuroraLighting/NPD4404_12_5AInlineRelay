@@ -318,7 +318,7 @@ useHwConfigurator=true
 simeepromSize=8192
 }
 {setupId:token
-application=PATH(ABSOLUTE):C:\SiliconLabs\SimplicityStudio\v4\developer\sdks\gecko_sdk_suite\v2.2\app\builder\NPDXXXXProductTemplate\app-tokens.h
+application=PATH(ABSOLUTE):C:\SiliconLabs\SimplicityStudio\v4\developer\sdks\gecko_sdk_suite\v2.2\app\builder\NPD4404_12_5AInlineRelay\app-tokens.h
 }
 #  The name of the set of Command Line Interface (CLI) commands that are
 #  compiled into the application by default.

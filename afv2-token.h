@@ -22,7 +22,7 @@
 #include "protocol/zigbee/app/framework/plugin-soc/connection-manager/connection-manager-tokens.h"
 
 // Custom token header file
-#include "app/builder/NPDXXXXProductTemplate/app-tokens.h"
+#include "app/builder/NPD4404_12_5AInlineRelay/app-tokens.h"
 
 #ifdef CUSTOM_TOKEN_HEADER
   #include CUSTOM_TOKEN_HEADER
