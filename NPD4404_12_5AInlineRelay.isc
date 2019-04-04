@@ -60,7 +60,7 @@ FlashAttributes:0,19,server,0
 ReportableAttributes:0,4,server,0
 
 #  User defined default values for attributes.
-AttributeDefaults:6,0,server,0,0x00:8,0,server,0,0xfe:0,5,server,0,12.5ARelay51AU:0,10,server,0,NPD4404:0,7,server,0,1:0,4,server,0,Aurora:0,11,server,0,www.auroralighting.com:0,1,server,0,0x01:0,2,server,0,0x02:0,3,server,0,0x01:0,6,server,0,20190230:25,0,client,0,0x0:25,1,client,0,0x0:25,2,client,0,0x00000001:25,7,client,0,0x121C:25,8,client,0,0x1411
+AttributeDefaults:6,0,server,0,0x00:8,0,server,0,0xfe:0,5,server,0,12.5ARelay51AU:0,10,server,0,NPD4404:0,7,server,0,1:0,4,server,0,Aurora:0,11,server,0,www.auroralighting.com:0,1,server,0,0x01:0,2,server,0,0x02:0,3,server,0,0x01:0,6,server,0,20190230:25,0,client,0,0x0:25,1,client,0,0x0:25,2,client,0,0x00000002:25,7,client,0,0x121C:25,8,client,0,0x1411
 
 #  Lists the channels that this application will be configured to use.
 Channels:11
@@ -88,6 +88,8 @@ Callbacks:emberAfMainStartCallback,emberAfMainTickCallback,emberAfMainInitCallba
 
 #  Any customer-specific general purpose custom events.
 CustomEvents:eventIdentifyControl,eventIdentifyCallback
+
+CustomEvents:eventCommsControl,eventCommsFunction
 
 #  If bindings are enabled then this is the maximum number of supported
 #  bindings.
@@ -922,7 +924,7 @@ AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]
 
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]~!module+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_IMAGE_TYPE_ID,5137
 
-AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]~!module+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,1
-
 AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]~!module+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_HARDWARE_VERSION,1
+
+AppPluginOption(efr32~family[M]~series[1]~device_configuration[3]~performance[P]~radio[732]~flash[512K]~temp[G]~package[M]~pins[48]~!module+gcc):EMBER_AF_PLUGIN_OTA_CLIENT_POLICY_FIRMWARE_VERSION,2
 

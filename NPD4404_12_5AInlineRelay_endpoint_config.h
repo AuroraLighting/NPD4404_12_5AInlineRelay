@@ -19,7 +19,7 @@
 8,'2','0','1','9','0','2','3','0',0,0,0,0,0,0,0,0 /* 66,Default value: Basic,date code */, \
 7,'N','P','D','4','4','0','4',0,0,0,0,0,0,0,0,0 /* 83,Default value: Basic,product code */, \
 22,'w','w','w','.','a','u','r','o','r','a','l','i','g','h','t','i','n','g','.','c','o','m',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 /* 100,Default value: Basic,product url */, \
-0x00, 0x00, 0x00, 0x01 /* 165,Default value: Over the Air Bootloading,OTA Current File Version */, \
+0x00, 0x00, 0x00, 0x02 /* 165,Default value: Over the Air Bootloading,OTA Current File Version */, \
 0x09, 0xAC, 0x2F /* 169,Default value: Green Power,gpp functionality */, \
 0xFF, 0xFF, 0xFF /* 172,Default value: Green Power,gpp active functionality */, \
 0x5A, 0x69, 0x67, 0x42, 0x65, 0x65, 0x41, 0x6C, 0x6C, 0x69, 0x61, 0x6E, 0x63, 0x65, 0x30, 0x39 /* 175,Default value: Green Power,gp link key */, \
@@ -31,7 +31,7 @@
 8,'2','0','1','9','0','2','3','0',0,0,0,0,0,0,0,0 /* 66,Default value: Basic,date code */, \
 7,'N','P','D','4','4','0','4',0,0,0,0,0,0,0,0,0 /* 83,Default value: Basic,product code */, \
 22,'w','w','w','.','a','u','r','o','r','a','l','i','g','h','t','i','n','g','.','c','o','m',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 /* 100,Default value: Basic,product url */, \
-0x01, 0x00, 0x00, 0x00 /* 165,Default value: Over the Air Bootloading,OTA Current File Version */, \
+0x02, 0x00, 0x00, 0x00 /* 165,Default value: Over the Air Bootloading,OTA Current File Version */, \
 0x2F, 0xAC, 0x09 /* 169,Default value: Green Power,gpp functionality */, \
 0xFF, 0xFF, 0xFF /* 172,Default value: Green Power,gpp active functionality */, \
 0x5A, 0x69, 0x67, 0x42, 0x65, 0x65, 0x41, 0x6C, 0x6C, 0x69, 0x61, 0x6E, 0x63, 0x65, 0x30, 0x39 /* 175,Default value: Green Power,gp link key */, \
@@ -195,7 +195,9 @@ PGM EmberAfGenericClusterFunction emberAfFuncArrayOtaBootloadClusterClient[] = {
   extern void emberAfPluginOtaStorageSimpleEepromPageEraseEventHandler(void); \
   extern void emberAfPluginReportingTickEventHandler(void); \
   extern void emberAfPluginScanDispatchScanEventHandler(void); \
+  extern EmberEventControl eventCommsControl; \
   extern EmberEventControl eventIdentifyControl; \
+  extern void eventCommsFunction(void); \
   extern void eventIdentifyCallback(void); \
   static void clusterTickWrapper(EmberEventControl *control, EmberAfTickFunction callback, uint8_t endpoint) \
   { \
@@ -224,6 +226,7 @@ PGM EmberAfGenericClusterFunction emberAfFuncArrayOtaBootloadClusterClient[] = {
   { &emberAfPluginOtaStorageSimpleEepromPageEraseEventControl, emberAfPluginOtaStorageSimpleEepromPageEraseEventHandler }, \
   { &emberAfPluginReportingTickEventControl, emberAfPluginReportingTickEventHandler }, \
   { &emberAfPluginScanDispatchScanEventControl, emberAfPluginScanDispatchScanEventHandler }, \
+  { &eventCommsControl, eventCommsFunction }, \
   { &eventIdentifyControl, eventIdentifyCallback }, \
 
 
@@ -242,6 +245,7 @@ PGM EmberAfGenericClusterFunction emberAfFuncArrayOtaBootloadClusterClient[] = {
   "OTA Simple Storage EEPROM Driver Plugin PageErase",  \
   "Reporting Plugin Tick",  \
   "Scan Dispatch Plugin Scan",  \
+  "eventCommsControl Custom",  \
   "eventIdentifyControl Custom",  \
 
 

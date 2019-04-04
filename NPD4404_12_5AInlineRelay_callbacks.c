@@ -66,7 +66,7 @@ bool emberAfMainStartCallback(int* returnCode,
    MCUInit(COM_USART1);
    if(!ResetWasBootloader())
    {
-      MCURequestOnOffModeRelay(RELAY_OFF);
+      MCURequestOnOffModeRelay(RELAY_OFF, false);
    }
    return false;
 }
@@ -213,7 +213,7 @@ void eventIdentifyCallback()
 {
    static bool s_identifyOnOff = false;
 
-   MCURequestOnOffModeRelay(s_identifyOnOff);
+   MCURequestOnOffModeRelay(s_identifyOnOff, true);
    s_identifyOnOff = !s_identifyOnOff;
    s_uiActive = true;
    s_uiActiveStartTimeMs = halCommonGetInt32uMillisecondTick();
@@ -249,7 +249,7 @@ static void ZigbeeProcess()
    if((s_zigbeeChangePending) && (elapsedTimeInt32u(lastZigbeeProcess, nowMs) > MCU_COMMAND_INTERVAL_MS))
    {
       u8 onOff = ClusterReadOnOff(RELAY_ENDPOINT);
-      MCURequestOnOffModeRelay(onOff);
+      MCURequestOnOffModeRelay(onOff, true);
       s_zigbeeChangePending = false;
       lastZigbeeProcess = nowMs;
    }
